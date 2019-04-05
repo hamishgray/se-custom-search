@@ -15,9 +15,17 @@ function search(){
   $saleDataURL = "https://api.secretescapes.com/v3/sales?se-api-token=".$seapitoken."&territory=".$territory;
 
   $json = file_get_contents($saleDataURL);
-  $sales = json_decode($json, true);
-  // print_r($sales);
-
+  $rawsales = json_decode($json, true);
+  // check sale is live
+  $sales = [];
+  foreach($rawsales as $sale){
+    $saleStartDate = new DateTime($sale['start']);
+    $currentDate = new DateTime();
+    if($saleStartDate <= $currentDate){
+      // live
+      array_push($sales,$sale);
+    }
+  }
 
 
   $outputArray = [];
