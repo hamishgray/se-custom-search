@@ -1,6 +1,7 @@
 <?php include "search.php" ?>
 
 <html lang="en">
+  <meta name="robots" content="noindex">
   <head>
     <title>Custom Search | Secret Escapes</title>
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i,600,600i,700,700i|Source+Serif+Pro:400,600,700" rel="stylesheet">
@@ -23,9 +24,9 @@
 
             <label for='territory'>Territory:</label>
             <select name="territory" id="territory">
-              <option value="uk">UK</option>
-              <option value="it">IT</option>
-              <option value="se">SE</option>
+              <option value="es">United Kingdom</option>
+              <option value="it">Italy</option>
+              <option value="sv">Sweden</option>
             </select>
             <div class="space--xs"></div>
 

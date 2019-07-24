@@ -6,13 +6,24 @@ function search(){
   /* ============================================
    * API Connection and config
    */
-  $territory = "uk";
+  $territory = "es";
   $territoryQ = isset($_GET['territory']);
   if($territoryQ){
     $territory = $_GET['territory'];
   }
+
+  // Correct Secret Escapes site for territory
+	$seSite = 'https://www.secretescapes.com';
+	if( $territory == 'it' ){
+		$seSite = 'https://it.secretescapes.com';
+	}else if( $territory == 'sv' ){
+		$seSite = 'https://www.secretescapes.se';
+	}else{
+		$seSite = 'https://www.secretescapes.com';
+	}
+
   $seapitoken = "90370f0a-cc20-46a7-9934-a1cc4df00502";
-  $saleDataURL = "https://api.secretescapes.com/v3/sales?se-api-token=".$seapitoken."&territory=".$territory;
+  $saleDataURL = "https://api.secretescapes.com/v4/sales?se-api-token=".$seapitoken."&affiliate=".$territory;
 
   $json = file_get_contents($saleDataURL);
   $rawsales = json_decode($json, true);
@@ -42,15 +53,15 @@ function search(){
     $mergedArray = [];
     foreach($keywordFilterArray as $filter){
       $filteredArray = array_filter($sales, function($sales) use($filter){
-        if( stripos( $sales["location"]["displayName"], $filter ) ){
+        if( stripos( $sales['editorial']['destinationName'], $filter ) ){
           return true;
-        }else if( stripos(" ".$sales["location"]["city"]["name"], $filter ) ){
+        }else if( stripos(" ".$sales['location']['city']['name'], $filter ) ){
           return true;
-        }else if( stripos(" ".$sales["location"]["country"]["name"], $filter ) ){
+        }else if( stripos(" ".$sales['location']['country']['name'], $filter ) ){
           return true;
-        }else if( stripos(" ".$sales["reasonToLove"], $filter ) ){
+        }else if( stripos(" ".$sales['editorial']['reasonToLove'], $filter ) ){
           return true;
-        }else if( stripos(" ".$sales["title"], $filter ) ){
+        }else if( stripos(" ".$sales['editorial']['title'], $filter ) ){
           return true;
         }
       });
@@ -84,9 +95,9 @@ function search(){
     foreach($tagFilterArray as $filter){
       $filteredArray = array_filter($filterByTags, function($filterByTags) use($filter){
 
-        for($i = 0; $i <= count($filterByTags["tags"])-1; $i++){
-          $tag = $filterByTags["tags"][$i];
-          if( stripos( " ".$tag["key"], $filter ) ){
+        for($i = 0; $i <= count($filterByTags['tags'])-1; $i++){
+          $tag = $filterByTags['tags'][$i];
+          if( stripos( " ".$tag, $filter ) ){
             return true;
           }
         }
@@ -113,22 +124,22 @@ function search(){
   for($i = 0; $i <= count($filteredSales)-1; $i++){
     $item = $filteredSales[$i];
     $tags = '';
-    for($i2 = 0; $i2 <= count($item["tags"])-1; $i2++){
-      $tags .= $item["tags"][$i2]["key"] . ", ";
+    for($i2 = 0; $i2 <= count($item['tags'])-1; $i2++){
+      $tags .= $item['tags'][$i2] . ", ";
     }
     $results.= "<div class='sale'>
-        <p>Title: ".$item['title']."</p>
-        <p>Location: ".$item['location']['displayName']."</p>
+        <p>Title: ".$item['editorial']['title']."</p>
+        <p>Location: ".$item['editorial']['destinationName']."</p>
         <p>City: ".$item['location']['city']['name']."</p>
         <p>Country: ".$item['location']['country']['name']."</p>
-        <p>Reason to love: ".$item['reasonToLove']."</p>
+        <p>Reason to love: ".$item['editorial']['reasonToLove']."</p>
         <p>Tags: ".$tags."</p>
-        <p><a href='https://www.secretescapes.com/".$item['urlSlug']."/sale'>View sale</a></p>
+        <p><a href='".$seSite.$item['links']['sale']."'>View sale</a></p>
       </div>";
     $tags=''; // reset tags for each sale
   }
 
-  return array('results' => $results, 'total' => $total);
+  return array('results' => $results, 'total' => $total, 'json' => $filteredSales);
 
 }
 
