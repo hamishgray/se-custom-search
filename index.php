@@ -25,6 +25,7 @@
             <label for='territory'>Territory:</label>
             <select name="territory" id="territory">
               <option value="es">United Kingdom</option>
+              <option value="de">Germany</option>
               <option value="it">Italy</option>
               <option value="sv">Sweden</option>
             </select>

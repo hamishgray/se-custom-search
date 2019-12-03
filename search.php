@@ -18,6 +18,8 @@ function search(){
 		$seSite = 'https://it.secretescapes.com';
 	}else if( $territory == 'sv' ){
 		$seSite = 'https://www.secretescapes.se';
+	}else if( $territory == 'de' ){
+		$seSite = 'https://www.secretescapes.de';
 	}else{
 		$seSite = 'https://www.secretescapes.com';
 	}
