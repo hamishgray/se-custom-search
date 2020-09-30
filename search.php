@@ -55,15 +55,15 @@ function search(){
     $mergedArray = [];
     foreach($keywordFilterArray as $filter){
       $filteredArray = array_filter($sales, function($sales) use($filter){
-        if( stripos( $sales['editorial']['destinationName'], $filter ) ){
+        if( stripos(" ".$sales['editorial']['destinationName']." ", $filter ) ){
           return true;
-        }else if( stripos(" ".$sales['location']['city']['name'], $filter ) ){
+        }else if( stripos(" ".$sales['location']['city']['name']." ", $filter ) ){
           return true;
-        }else if( stripos(" ".$sales['location']['country']['name'], $filter ) ){
+        }else if( stripos(" ".$sales['location']['country']['name']." ", $filter ) ){
           return true;
-        }else if( stripos(" ".$sales['editorial']['reasonToLove'], $filter ) ){
+        }else if( stripos(" ".$sales['editorial']['reasonToLove']." ", $filter ) ){
           return true;
-        }else if( stripos(" ".$sales['editorial']['title'], $filter ) ){
+        }else if( stripos(" ".$sales['editorial']['title']." ", $filter ) ){
           return true;
         }
       });
